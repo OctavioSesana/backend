@@ -1,0 +1,36 @@
+### obtener todos los characters
+GET http://localhost:3000/api/persona
+
+### obtener un character -- busqueda por id
+GET http://localhost:3000/api/persona/432235325
+
+### crear un nuevo character
+POST http://localhost:3000/api/persona
+Content-Type: application/json
+
+{
+    "name": "Raul",
+    "lastname": "warrior",
+    "dni": 346346,
+}
+
+### modificar un character (PUT - modificacion completa e idempotente)
+PUT http://localhost:3000/api/persona/432235325
+Content-Type: application/json
+    
+{
+    "name": "Martin",
+    "lastname": "Vivas",
+    "dni": 3423523456346,
+}
+
+### modificar un character (PATCH - modificacion parcial de un recurso)
+PATCH http://localhost:3000/api/persona
+Content-Type: application/json
+
+{
+    "name": "keti",
+}
+
+### eliminar un character
+DELETE http://localhost:3000/api/persona
