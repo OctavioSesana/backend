@@ -10,7 +10,6 @@ function sanitizedPersonaInput(req: Request, res: Response, next: NextFunction) 
       lastname: req.body.lastname,
       dni: req.body.dni,
     }
-    //more checks here
   
     Object.keys(req.body.sanitizedInput).forEach((key) => {
       if (req.body.sanitizedInput[key] === undefined) {
@@ -25,7 +24,7 @@ function findAll(req: Request, res: Response) {
 }
 
 function findOne(req: Request, res: Response) {
-        const dni = Number(req.params.dni); // Convert dni to a number
+        const dni = Number(req.params.dni); 
         const persona = repository.findOne({ dni });
         if (!persona) {
             return res.status(404).send({ message: "Persona not found" });
@@ -40,24 +39,33 @@ function add(req: Request, res: Response) {
       input.lastname,
       input.dni
     )
+   const existingPersona = repository.findOne({ dni: personaInput.dni });
+    if (existingPersona) {
+      return res.status(409).send({ message: "Persona already exists", data: existingPersona});
+    }
     
     const persona = repository.add(personaInput)
     res.status(201).send({message: "Character created", data: persona})
   }
   
-function update(req: Request, res: Response) {
-    req.body.sanitizedInput.dni = req.params.dni
+  function update(req: Request, res: Response) {
+    const dni = Number(req.params.dni)
+    const input = req.body.sanitizedInput
+    const personaInput = new Persona(
+      input.name,
+      input.lastname,
+      input.dni
+    )
+
     const persona = repository.update(req.body.sanitizedInput)
-  
     if (!persona) {
       return res.status(404).send({ message: "Persona not found" })
     }
-  
-    return res.status(200).send({ message: "Persona updated succesfully", data: persona })
+    res.status(200).send({ message: "Persona updated", data: persona })
   }
 
 function remove(req: Request, res: Response) {
-        const dni = Number(req.params.dni); // Convert dni to a number
+        const dni = Number(req.params.dni); 
         const persona = repository.delete({ dni })
     
         if (!persona) {
