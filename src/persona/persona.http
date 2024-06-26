@@ -2,35 +2,35 @@
 GET http://localhost:3000/api/persona
 
 ### obtener un character -- busqueda por id
-GET http://localhost:3000/api/persona/56756
+GET http://localhost:3000/api/persona/dea3d485-6af6-44e9-84f9-
 
 ### crear un nuevo character
 POST http://localhost:3000/api/persona
 Content-Type: application/json
 
 {
-    "name": "Raul",
-    "lastname": "warrior",
+    "name": "Martin",
+    "lastname": "Vivas",
     "dni": 56756
 }
 
 ### modificar un character (PUT - modificacion completa e idempotente)
-PUT http://localhost:3000/api/persona/43644808
+PUT http://localhost:3000/api/persona/46c68eec-a108-4e47-be9a-0f02d6a73490
 Content-Type: application/json
     
 {
-    "name": "Martina",
-    "lastname": "Vivarco",
+    "name": "Camila",
+    "lastname": "Salvia",
     "dni": 3423523456346
 }
 
 ### modificar un character (PATCH - modificacion parcial de un recurso)
-PATCH http://localhost:3000/api/persona/56756
+PATCH http://localhost:3000/api/persona/dea3d485-6af6-44e9-84f9-cb27107f4d74
 Content-Type: application/json
 
 {
-    "name": "CamilaXD"
+    "lastname": "Di Marco"
 }
 
 ### eliminar un character
-DELETE http://localhost:3000/api/persona/3423523456346
+DELETE http://localhost:3000/api/persona/46c68eec-a108-4e47-be9a-0f02d6a73490

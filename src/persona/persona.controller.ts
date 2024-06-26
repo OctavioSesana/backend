@@ -1,78 +1,42 @@
-import express, { Request, Response, NextFunction } from "express"
-import { PersonaRepository } from "./persona.repository"
-import { Persona } from "./persona.entity"
+import { PersonaService } from './persona.service';
+import { Persona } from './persona.models';
+import { Request, Response } from 'express';
 
-const repository = new PersonaRepository();
 
-function sanitizedPersonaInput(req: Request, res: Response, next: NextFunction) {
-    req.body.sanitizedInput = {
-      name: req.body.name,
-      lastname: req.body.lastname,
-      dni: req.body.dni,
-    }
-  
-    Object.keys(req.body.sanitizedInput).forEach((key) => {
-      if (req.body.sanitizedInput[key] === undefined) {
-        delete req.body.sanitizedInput[key]
-      }
-    })
-    next()
+const personaService = new PersonaService();
+
+export class PersonaController {
+  getAll(req: Request, res: Response) {
+    const personas = personaService.getAll();
+    res.json(personas);
   }
 
-function findAll(req: Request, res: Response) {
-    res.json({ data: repository.findAll()})
+  get(req: Request, res: Response) {
+    const id = req.params.id;
+    const persona = personaService.get(id);
+    if (persona) {
+      res.json(persona);
+    } else {
+      res.status(404).send('Persona no encontrada');
+    }
+  }
+
+  create(req:Request, res: Response) {
+    const persona: Persona = req.body;
+    personaService.create(persona);
+    res.status(201).send('Persona creada');
+  }
+
+  update(req: Request, res: Response) {
+    const id = req.params.id;
+    const persona: Persona = req.body;
+    personaService.update(id, persona);
+    res.send('Persona actualizada');
+  }
+
+  delete(req: Request, res: Response) {
+    const id = req.params.id;
+    personaService.delete(id);
+    res.send('Persona eliminada');
+  }
 }
-
-function findOne(req: Request, res: Response) {
-        const dni = Number(req.params.dni); 
-        const persona = repository.findOne({ dni });
-        if (!persona) {
-            return res.status(404).send({ message: "Persona not found" });
-        }
-        res.json({ data: persona });
-}
-
-function add(req: Request, res: Response) {
-    const input = req.body.sanitizedInput
-    const personaInput = new Persona(
-      input.name,
-      input.lastname,
-      input.dni
-    )
-   const existingPersona = repository.findOne({ dni: personaInput.dni });
-    if (existingPersona) {
-      return res.status(409).send({ message: "Persona already exists", data: existingPersona});
-    }
-    
-    const persona = repository.add(personaInput)
-    res.status(201).send({message: "Character created", data: persona})
-  }
-  
-  function update(req: Request, res: Response) {
-    const dni = Number(req.params.dni)
-    const input = req.body.sanitizedInput
-    const personaInput = new Persona(
-      input.name,
-      input.lastname,
-      input.dni
-    )
-
-    const persona = repository.update(req.body.sanitizedInput)
-    if (!persona) {
-      return res.status(404).send({ message: "Persona not found" })
-    }
-    res.status(200).send({ message: "Persona updated", data: persona })
-  }
-
-function remove(req: Request, res: Response) {
-        const dni = Number(req.params.dni); 
-        const persona = repository.delete({ dni })
-    
-        if (!persona) {
-            res.status(404).send({ message: "Persona not found" })
-        } else{
-            res.status(200).send({ message: "Persona deleted succesfully" })
-        }
-    }
-
-export { sanitizedPersonaInput, findAll, findOne, add, update, remove}

@@ -1,5 +1,6 @@
 import express,  { NextFunction, Request, Response } from 'express'
-import { personaRouter } from './persona/persona.routes'
+import personaRouter from './persona/persona.routes';
+
 
 const app = express()
 app.use(express.json())
