@@ -1,0 +1,27 @@
+### obtener todas las canchas
+GET http://localhost:5500/api/canchas
+
+### obtener una cancha
+GET http://localhost:5500/api/canchas/812
+
+### agregar una nueva cancha
+//no tiene validaciones sobre agregar una cancha existente
+POST http://localhost:5500/api/canchas
+Content-Type: application/json
+
+{
+  "id": "30",
+  "estado": "disponible"
+}
+
+### modificar datos de una cancha (no idempotente)
+// se puede actualizar la mismo estado
+PATCH http://localhost:5500/api/canchas/812
+Content-Type: application/json
+
+{
+  "estado": "ocupada"
+}
+
+### dar de baja una cancha
+DELETE http://localhost:5500/api/canchas/114
