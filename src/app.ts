@@ -1,11 +1,12 @@
 import express,  { NextFunction, Request, Response } from 'express'
 import personaRouter from './persona/persona.routes';
-
+import { canchaRouter } from './src/cancha/cancha.routes.js'
 
 const app = express()
 app.use(express.json())
 
 app.use("/api/persona", personaRouter)
+app.use('/api/canchas', canchaRouter)
 
 app.use((_, res, next) => {
   res.status(404).send({ message: "Resource not found" })
